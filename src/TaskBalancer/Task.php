@@ -2,6 +2,9 @@
 
 namespace Toplan\TaskBalance;
 
+use \DateTime;
+use \DateTimeZone;
+
 /**
  * Class Task.
  */
@@ -181,7 +184,10 @@ class Task
         $pass = $this->callHookHandler('beforeRun');
         if ($pass) {
             $this->status = static::RUNNING;
-            $this->time['started_at'] = microtime();
+            
+            $dateTime = new DateTime('now', new DateTimeZone('UTC'));
+            
+            $this->time['started_at'] = $dateTime->format('Y-m-d\Th:i:s').substr(microtime(false), 1, 7).'Z';
         }
 
         return $pass;
@@ -197,7 +203,11 @@ class Task
     protected function afterRun($success)
     {
         $this->status = static::FINISHED;
-        $this->time['finished_at'] = microtime();
+        
+        $dateTime = new DateTime('now', new DateTimeZone('UTC'));
+            
+        $this->time['finished_at'] = $dateTime->format('Y-m-d\Th:i:s').substr(microtime(false), 1, 7).'Z';
+        
         $return = [];
         $return['success'] = $success;
         $return['time'] = $this->time;

@@ -1,6 +1,9 @@
 <?php
 
-namespace Toplan\TaskBalance;
+namespace Toplan\TaskBalance; 
+
+use \DateTime;
+use \DateTimeZone;
 
 /**
  * Class Driver.
@@ -109,7 +112,9 @@ class Driver
      */
     protected function beforeRun()
     {
-        $this->time['started_at'] = microtime();
+        $dateTime = new DateTime('now', new DateTimeZone('UTC'));
+            
+        $this->time['started_at'] = $dateTime->format('Y-m-d\Th:i:s').substr(microtime(false), 1, 7).'Z';
 
         return true;
     }
@@ -141,7 +146,9 @@ class Driver
      */
     protected function afterRun($result)
     {
-        $this->time['finished_at'] = microtime();
+        $dateTime = new DateTime('now', new DateTimeZone('UTC'));
+            
+        $this->time['finished_at'] = $dateTime->format('Y-m-d\Th:i:s').substr(microtime(false), 1, 7).'Z';
 
         return $result;
     }
